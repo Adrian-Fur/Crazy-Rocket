@@ -499,6 +499,7 @@ GameObject:
   - component: {fileID: 360867653}
   - component: {fileID: 360867650}
   - component: {fileID: 2135151622}
+  - component: {fileID: 88600882}
   m_Layer: 0
   m_Name: AtomRocket
   m_TagString: Untagged
@@ -667,6 +668,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &88600882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8854619882081110099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aaf49e98a85ae64795229397d540861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelLoadDelay: 2
 --- !u!1 &8972606480291121315
 GameObject:
   m_ObjectHideFlags: 0
