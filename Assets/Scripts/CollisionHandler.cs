@@ -6,8 +6,35 @@ using UnityEngine.SceneManagement;
 public class CollisionHandler : MonoBehaviour
 {
     [SerializeField] float levelLoadDelay = 2f;
+    [SerializeField] AudioClip deathAudio;
+    [SerializeField] AudioClip successAudio;
+    [SerializeField] ParticleSystem deathParticle;
+    [SerializeField] ParticleSystem successParticle;
+
+    AudioSource audioSound;
+    Movement movementScript;
+
+    bool isTransitioning = false;
+    bool collisonDisabled = false;
+
+    private void Start()
+    {
+        audioSound = GetComponent<AudioSource>();
+        movementScript = GetComponent<Movement>();
+    }
+    private void Update()
+    {
+        RespondToDebugKeys();
+    }
+
+
     private void OnCollisionEnter(Collision collision)
     {
+        if (isTransitioning || collisonDisabled)
+        {
+            return;
+        }
+
         switch (collision.gameObject.tag)
         {
             case "Friendly":
@@ -26,15 +53,21 @@ public class CollisionHandler : MonoBehaviour
     }
     void StartSuccessSequence()
     {
-        GetComponent<Movement>().enabled = false;
-        GetComponent<AudioSource>().enabled = false;
+        isTransitioning = true;
+        audioSound.Stop();
+        successParticle.Play();
+        movementScript.enabled = false;
+        audioSound.PlayOneShot(successAudio);
         Invoke("NextScene", levelLoadDelay);
     }
     void StartCrashSequence()
     {
-        GetComponent<Movement>().enabled = false;
-        GetComponent<AudioSource>().enabled = false;
-        Invoke("ReloadLevel", levelLoadDelay);
+        isTransitioning = true;
+        audioSound.Stop();
+        deathParticle.Play();
+        movementScript.enabled = false;
+        audioSound.PlayOneShot(deathAudio);
+        Invoke("ReloadLevel", levelLoadDelay);        
     }
     void ReloadLevel()
     {
@@ -51,5 +84,16 @@ public class CollisionHandler : MonoBehaviour
             nextSceneIndex = 0;
         }
         SceneManager.LoadScene(nextSceneIndex);
+    }
+    private void RespondToDebugKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            NextScene();
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            collisonDisabled = !collisonDisabled;
+        }
     }
 }
